@@ -50,7 +50,7 @@ public class Cabelo extends Produto {// Criação da classe Cabelo que herda os 
 		}
 
 		super.visualizar();
-		System.out.println("  Produto para cabelos: " + tipoCabelo);
+		System.out.println("  Indicado para cabelos: " + tipoCabelo);
 	}
 
 }

@@ -3,6 +3,7 @@ package perfumaria;
 import java.io.IOException;
 import java.util.Scanner;
 
+import perfumaria.controller.PerfumariaController;
 import perfumaria.model.Cabelo;
 import perfumaria.model.Esmalte;
 
@@ -27,6 +28,20 @@ public class Menu {
 		 */
 		int opcao;
 		Scanner input = new Scanner(System.in);
+		
+		/*
+		 * Informação dos produtos
+		 */
+		
+		String nome;
+		int id, tipo = 0, tipoEsmalte = 0, tipoCabelo = 0;
+		float preco;
+		
+		/*
+		 * Instanciando o Controller
+		 */
+		
+		PerfumariaController controlador = new PerfumariaController();
 		
 		/*
 		 * Testes - comentar depois
@@ -117,22 +132,299 @@ public class Menu {
 			
 			// Adicionar produto
 			case 1:
+				
+				/*
+				 * Cabeçalho
+				 */
+				System.out.println("\n");
+				System.out.println("*****************************");
+				System.out.println("*     ADICIONAR PRODUTO     *");
+				System.out.println("*****************************");
+				System.out.println("-----------------------------");
+				
+				/*
+				 * Leitura dos atributos
+				 */
+				
+				// Limpa o cachê
+				input.nextLine(); 
+				
+				// Leitura do nome do produto
+				System.out.print("Digite o nome do produto: ");
+				nome = input.nextLine();
+				
+				// Leitura do preço do produto
+				System.out.println("------------------------------");
+				System.out.print("Digite o preço do produto: ");
+				preco = input.nextFloat();
+				
+				// Gerar o ID do produto
+				id = controlador.gerarId();
+				
+				// Laço Do...While para garantir que a opção escolhida seja 1 ou 2
+				do {
+					System.out.println("\nEscolha o tipo do produto: " + "\n" + 
+									   "1 - Produto para unhas" 	   + "\n" +
+									   "2 - Produto para cabelos");
+					System.out.println("------------------------------");
+					
+					// Leitura do tipo
+					System.out.print("Digite a opção desejada: ");
+					tipo = input.nextInt();
+					
+					// Laço condicional para informar o usuário de que a escolha é inválida caso outro número seja digitado
+					if(tipo < 1 || tipo > 2) {
+						System.out.println("Tipo inválido. Por favor, escolha uma opção válida");
+						System.out.println("\nPressione Enter para escolher novamente.");
+						pressEnter();
+					}
+					
+				}while(tipo < 1 || tipo > 2);
+				
+				// Switch...Case com o tipo do produto
+				switch(tipo) {
+				
+				// Estruturas similares às que foram usadas para a leitura do Tipo, mas com outros valores
+				case 1 -> { // Esmaltes
+					do {
+						System.out.println("\nEscolha o acabamento do esmalte: " + "\n" + 
+										   "1 - Cremoso" 						 + "\n" + 
+										   "2 - Fosco" 							 + "\n" +
+										   "3 - Gel");
+						System.out.println("------------------------------");
+						
+						System.out.print("Digite a opção desejada: ");
+						tipoEsmalte = input.nextInt();
+						
+						if(tipoEsmalte < 1 || tipoEsmalte > 3) {
+							System.out.println("\nTipo inválido. Por favor, escolha uma opção válida.");
+							System.out.println("\nPressione Enter para escolher novamente.");
+							pressEnter();
+						}else {
+							
+							// Cria o produto
+							controlador.criarProduto(new Esmalte(nome, id, tipo, preco, tipoEsmalte));
+						}
+						
+					}while(tipoEsmalte < 1 || tipoEsmalte > 3);
+				}
+				
+				case 2 -> {// Cabelo
+					do {
+						System.out.println("\nEscolha o tipo de cabelo " + "\n" + 
+								   		   "1 - Lisos" 				     + "\n" + 
+								   		   "2 - Ondulados" 				 + "\n" +
+								   		   "3 - Cacheados" 				 + "\n" + 
+								   		   "4 - Crespos");
+						System.out.println("------------------------------");
+						
+						System.out.print("Digite a opção desejada: ");
+						tipoCabelo = input.nextInt();
+						
+						if(tipoCabelo < 1 || tipoCabelo > 4) {
+							System.out.println("\nTipo inválido. Por favor, escolha uma opção válida.");
+							System.out.println("\nPressione Enter para escolher novamente.");
+							pressEnter();
+						}else {
+							
+							// Cria o produto
+							controlador.criarProduto(new Cabelo(nome, id, tipo, preco, tipoCabelo));
+						}
+						
+					}while(tipoCabelo < 1 || tipoCabelo > 4);
+				}
+				}
+				
+				System.out.println("\nPressione Enter para continuar.");
+				pressEnter();
 				break;
 			
 			// Listar todos os produtos
 			case 2:
+				
+				/*
+				 * Cabeçalho
+				 */
+				
+				System.out.println("\n");
+				System.out.println("*****************************");
+				System.out.println("*      LISTAR PRODUTOS      *");
+				System.out.println("*****************************");
+				System.out.println("-----------------------------");
+				
+				/*
+				 * Chamada do método listarTodos() do controller
+				 */
+				
+				controlador.listarTodos();
+				
+				System.out.println("\nPressione Enter para continuar.");
+				pressEnter();
 				break;
 				
 			// Consultar produto por ID
 			case 3:
+				
+				/*
+				 * Cabeçalho
+				 */
+				
+				System.out.println("\n");
+				System.out.println("****************************");
+				System.out.println("* CONSULTAR PRODUTO POR ID *");
+				System.out.println("****************************");
+				System.out.println("----------------------------");
+				
+				/*
+				 * Leitura do ID
+				 */
+				System.out.print("Digite o ID do produto que você deseja consultar: ");
+				id = input.nextInt();
+				
+				/*
+				 * Chamada do método consultarPorId() do controller
+				 */
+				controlador.consultarPorId(id);
+				
+				System.out.println("\nPressione Enter para continuar.");
+				pressEnter();
 				break;
 				
 			// Atualizar produto
 			case 4:
+				
+				/*
+				 * Cabeçalho
+				 */
+				
+				System.out.println("\n");
+				System.out.println("*****************************");
+				System.out.println("*     ATUALIZAR PRODUTO     *");
+				System.out.println("*****************************");
+				System.out.println("-----------------------------");
+				
+				/*
+				 * Leitura do ID do produto a ser atualizado
+				 */
+				
+				System.out.print("Digite o ID do produto que você deseja atualizar: ");
+				id = input.nextInt();
+				
+				/*
+				 * Leitura dos novos valores de cada atributos - Código igual ao de adicionar produto
+				 */
+				
+				input.nextLine(); // Limpa o cachê
+				
+				// Lê o novo nome
+				System.out.print("Digite o nome do produto: ");
+				nome = input.nextLine();
+				
+				// Lê o novo preço
+				System.out.println("------------------------------");
+				System.out.print("Digite o preço do produto: ");
+				preco = input.nextFloat();
+				
+				// Lê o novo tipo
+				do {
+					System.out.println("\nEscolha o tipo do produto: " + "\n" + 
+									   "1 - Produto para unhas" 	   + "\n" +
+									   "2 - Produto para cabelos");
+					System.out.println("------------------------------");
+					
+					System.out.print("Digite a opção desejada: ");
+					tipo = input.nextInt();
+					
+					if(tipo < 1 || tipo > 2) {
+						System.out.println("Tipo inválido. Por favor, escolha uma opção válida");
+						System.out.println("\nPressione Enter para escolher novamente.");
+						pressEnter();
+					}
+					
+				}while(tipo < 1 || tipo > 2);
+				
+				// Lê o novo tipo de acabamento/tipo de cabelo
+				switch(tipo) {
+				case 1 -> {
+					do {
+						System.out.println("\nEscolha o acabamento do esmalte: " + "\n" + 
+										   "1 - Cremoso" 						 + "\n" + 
+										   "2 - Fosco" 							 + "\n" +
+										   "3 - Gel");
+						System.out.println("------------------------------");
+						
+						System.out.print("Digite a opção desejada: ");
+						tipoEsmalte = input.nextInt();
+						
+						if(tipoEsmalte < 1 || tipoEsmalte > 3) {
+							System.out.println("\nTipo inválido. Por favor, escolha uma opção válida.");
+							System.out.println("\nPressione Enter para escolher novamente.");
+							pressEnter();
+						}else {
+							
+							// Atualiza o produto
+							controlador.atualizarProduto(new Esmalte(nome, id, tipo, preco, tipoEsmalte));
+						}
+						
+					}while(tipoEsmalte < 1 || tipoEsmalte > 3);
+				}
+				case 2 -> {
+					do {
+						System.out.println("\nEscolha o tipo de cabelo " + "\n" + 
+								   		   "1 - Lisos" 				     + "\n" + 
+								   		   "2 - Ondulados" 				 + "\n" +
+								   		   "3 - Cacheados" 				 + "\n" + 
+								   		   "4 - Crespos");
+						System.out.println("------------------------------");
+						
+						System.out.print("Digite a opção desejada: ");
+						tipoCabelo = input.nextInt();
+						
+						if(tipoCabelo < 1 || tipoCabelo > 4) {
+							System.out.println("\nTipo inválido. Por favor, escolha uma opção válida.");
+							System.out.println("\nPressione Enter para escolher novamente.");
+							pressEnter();
+						}else {
+							
+							// Atualiza o produto
+							controlador.atualizarProduto(new Cabelo(nome, id, tipo, preco, tipoCabelo));
+						}
+						
+					}while(tipoCabelo < 1 || tipoCabelo > 4);
+				}
+				}
+				
+				System.out.println("\nPressione Enter para continuar.");
+				pressEnter();
 				break;
 				
 			// Remover produto
 			case 5:
+				
+				/*
+				 * Cabeçalho
+				 */
+				
+				System.out.println("\n");
+				System.out.println("*****************************");
+				System.out.println("*      REMOVER PRODUTO      *");
+				System.out.println("*****************************");
+				System.out.println("-----------------------------");
+				
+				/*
+				 * Leitura do ID do produto que será removido
+				 */
+				
+				System.out.print("Digite o ID do produto que você deseja remover: ");
+				id = input.nextInt();
+				
+				/*
+				 * Chamada do método deletarProduto() do controller
+				 */
+				controlador.deletarProduto(id);
+				
+				System.out.println("\nPressione Enter para continuar.");
+				pressEnter();
 				break;
 				
 			// Opção inválida
